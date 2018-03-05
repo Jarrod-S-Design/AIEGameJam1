@@ -9,8 +9,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] XboxButton shootButton = XboxButton.RightBumper;
     [SerializeField] float moveSpeed = 0;
     [SerializeField] float shootForce = 2;
-    [SerializeField] float holdLength = 0.8f;
+    [SerializeField] float holdDistance = 0.8f;
+    [SerializeField] float throwWaitTime = 0.5f;
     [SerializeField] GameObject turret;
+
+    float throwTimer;
 
     GameObject bomberang;
 
@@ -25,6 +28,7 @@ public class PlayerController : MonoBehaviour
         bomberang = null;
         bodyRotation = new Vector3 { x = 1 };
         turretRotation = new Vector3 { x = 1 };
+        throwTimer = 0;
     }
 
     void Update ()
@@ -33,13 +37,18 @@ public class PlayerController : MonoBehaviour
 
         if (bomberang != null)
         {
-            bomberang.transform.position = transform.position + turretRotation * holdLength;
+            bomberang.transform.position = transform.position + turretRotation * holdDistance;
 
-            if (XCI.GetButtonDown(shootButton, controllerNumber))
+
+            if (throwTimer <= 0 && XCI.GetButtonDown(shootButton, controllerNumber))
             {
                 // Shoot the boomberang!
                 bomberang.GetComponent<Bomberang>().Shoot(turretRotation.normalized * shootForce);
                 bomberang = null;
+            }
+            else
+            {
+                throwTimer -= Time.deltaTime;
             }
         }
     }
@@ -47,6 +56,7 @@ public class PlayerController : MonoBehaviour
     public void Hit(GameObject a_bomberang)
     {
         bomberang = a_bomberang;
+        throwTimer = throwWaitTime;
     }
 
     private void Movement()
