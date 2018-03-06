@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
         AddPlayer(XboxController.Second);
 
         CreateBomb(Random.Range(0, playerCount));
+
+        StartNewRound();
     }
 
     void StartNewRound()
@@ -111,7 +113,6 @@ public class GameManager : MonoBehaviour
         // Create the bomb
         bombGO = Instantiate(bomberangPrefab, Vector3.zero, bomberangPrefab.transform.rotation);
         bomberang = bombGO.GetComponent<Bomberang>();
-        bomberang.HitPlayer(players[playerNum]);
     }
 
     void AddPlayer(XboxController number)
@@ -122,7 +123,7 @@ public class GameManager : MonoBehaviour
         players[(int)number - 1] = newPlayer;
         newPlayer.GetComponent<PlayerController>().controllerNumber = number;
 
-        newPlayer.transform.position = playerSpawns.transform.GetChild((int)number - 1).position;
+        //newPlayer.transform.position = playerSpawns.transform.GetChild((int)number - 1).position;
     }
 
     void RespawnPlayer(int playerNum)
