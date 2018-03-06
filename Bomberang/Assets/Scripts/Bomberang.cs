@@ -10,6 +10,8 @@ public class Bomberang : MonoBehaviour
     [HideInInspector]
     public bool exploded;
 
+    public TrailColour trailColour;
+
     [SerializeField] float startTime = 10.0f;
     [SerializeField] float intialOffset = 0.0f;
     [SerializeField] float minVelocityToReturn = 2.0f;
@@ -97,9 +99,9 @@ public class Bomberang : MonoBehaviour
     void HitPlayer(GameObject player)
     {
         currentPlayer = player;
-
-        // Make that player the player holding this bomberang
         PlayerController hitPlayer = player.GetComponent<PlayerController>();
+        trailColour.SetColour(hitPlayer.color);
+        // Make that player the player holding this bomberang
         hitPlayer.Hit(gameObject);
         isHeld = true;
         rb.drag = normalDrag;

@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float throwWaitTime = 0.5f;
     [SerializeField] GameObject turret;
 
+    [HideInInspector]
+    public Color color;
+
     float moveSpeed;
     float throwTimer;
 
@@ -26,9 +29,13 @@ public class PlayerController : MonoBehaviour
 
     bool isAlive;
 
+    Material material;
+
     void Awake()
     {
         cc = GetComponent<CharacterController>();
+        material = GetComponent<MeshRenderer>().material;
+        color = material.color;
         bomberang = null;
         bodyRotation = new Vector3 { x = 1 };
         turretRotation = new Vector3 { x = 1 };

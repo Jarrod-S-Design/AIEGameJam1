@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         // Create the bomb
         bomb = Instantiate(bomberangPrefab, Vector3.zero, bomberangPrefab.transform.rotation);
  
-        bomb.GetComponent<Bomberang>() players[playerNum];
+        //bomb.GetComponent<Bomberang>() players[playerNum];
     }
 
     void AddPlayer(XboxController number)
