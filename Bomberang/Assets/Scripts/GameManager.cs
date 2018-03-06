@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject playerSpawns;
     [SerializeField] GameObject bomberangPrefab;
+
+    [SerializeField] Text timer;
+    [SerializeField] Text p1Deaths;
+    [SerializeField] Text p2Deaths;
+
 
     GameObject[] players;
     GameObject bombGO;
@@ -53,6 +59,20 @@ public class GameManager : MonoBehaviour
 
             StartNewRound();
         }
+
+        // Update the canvas
+        if (bomberang.timer > 5)
+        {
+            timer.text = ((int)bomberang.timer).ToString();
+        }
+        else
+        {
+            timer.text = bomberang.timer.ToString("F2");
+
+        }
+        p1Deaths.text = players[0].GetComponent<PlayerController>().deaths.ToString();
+        p2Deaths.text = players[1].GetComponent<PlayerController>().deaths.ToString();
+
 
         // Character selection
 

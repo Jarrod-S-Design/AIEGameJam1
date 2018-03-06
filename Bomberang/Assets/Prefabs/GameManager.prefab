@@ -54,3 +54,5 @@ MonoBehaviour:
   playerPrefab: {fileID: 1761023970503322, guid: ba3a6aff023eecd4580ec01599d71db8,
     type: 2}
   playerSpawns: {fileID: 0}
+  bomberangPrefab: {fileID: 1559219979663720, guid: 8574297cb275cf04ea6959b7f5a8d9cd,
+    type: 2}
