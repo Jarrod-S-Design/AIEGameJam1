@@ -1,3 +1,16 @@
+<<<<<<< .mine
+fileFormatVersion: 2
+guid: cef7c41e3470ed5448cbfba40b0d3745
+timeCreated: 1520313232
+licenseType: Free
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+||||||| .r0
+=======
 fileFormatVersion: 2
 guid: 937c567fb6986e44cbe3469f86b9698e
 timeCreated: 1520307111
@@ -8,3 +21,4 @@ NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+>>>>>>> .r18
