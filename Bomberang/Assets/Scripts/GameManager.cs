@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject bomberangPrefab;
 
     GameObject[] players;
-    GameObject bomb;
+    GameObject bombGO;
+    Bomberang bomberang;
 
     int playerCount = 0;
 
@@ -24,13 +25,16 @@ public class GameManager : MonoBehaviour
         AddPlayer(XboxController.First);
         AddPlayer(XboxController.Second);
 
-        int a = Random.Range(0, playerCount);
-        Debug.Log(a, gameObject);
-        CreateBomb(a);
+        CreateBomb(Random.Range(0, playerCount));
     }
 
     void Update()
     {
+
+        if (bomberang.isExploded)
+        {
+
+        }
 
         // Character selection
 
@@ -67,9 +71,9 @@ public class GameManager : MonoBehaviour
     void CreateBomb(int playerNum)
     {
         // Create the bomb
-        bomb = Instantiate(bomberangPrefab, Vector3.zero, bomberangPrefab.transform.rotation);
- 
-        //bomb.GetComponent<Bomberang>() players[playerNum];
+        bombGO = Instantiate(bomberangPrefab, Vector3.zero, bomberangPrefab.transform.rotation);
+        bomberang = bombGO.GetComponent<Bomberang>();
+        bomberang.HitPlayer(players[playerNum]);
     }
 
     void AddPlayer(XboxController number)
@@ -81,5 +85,10 @@ public class GameManager : MonoBehaviour
         newPlayer.GetComponent<PlayerController>().controllerNumber = number;
 
         newPlayer.transform.position = playerSpawns.transform.GetChild((int)number - 1).position;
+    }
+
+    void RespawnPlayer(int playerNum)
+    {
+        players[playerNum].transform.position = playerSpawns.transform.GetChild(playerNum).position;
     }
 }

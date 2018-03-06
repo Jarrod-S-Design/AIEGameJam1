@@ -8,7 +8,7 @@ public class Bomberang : MonoBehaviour
     [HideInInspector]
     public GameObject currentPlayer;
     [HideInInspector]
-    public bool exploded;
+    public bool isExploded;
 
     public TrailColour trailColour;
 
@@ -21,10 +21,12 @@ public class Bomberang : MonoBehaviour
     Rigidbody rb;
     Collider collider;
 
-    bool isHeld;
+    [HideInInspector]
+    public bool isHeld;
     bool onReturnFlight;
 
-    float timer = 10;
+    [HideInInspector]
+    public float timer = 10;
 
     float flightTime;
 
@@ -33,7 +35,7 @@ public class Bomberang : MonoBehaviour
         //currentPlayer = null;
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
-        exploded = false;
+        isExploded = false;
         isHeld = false;
         onReturnFlight = false;
         flightTime = 0;
@@ -45,6 +47,7 @@ public class Bomberang : MonoBehaviour
         if (timer > 0)
         {
             timer -= Time.deltaTime;
+            isExploded = false;
         }
 
         if (isHeld)
@@ -54,6 +57,7 @@ public class Bomberang : MonoBehaviour
             if (timer <= 0)
             {
                 // BOOM!!!
+                isExploded = true;
             }
         }
         else
@@ -96,7 +100,7 @@ public class Bomberang : MonoBehaviour
         collider.isTrigger = true;
     }
 
-    void HitPlayer(GameObject player)
+    public void HitPlayer(GameObject player)
     {
         currentPlayer = player;
         PlayerController hitPlayer = player.GetComponent<PlayerController>();

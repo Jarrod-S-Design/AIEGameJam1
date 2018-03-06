@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public Color color;
 
+    [HideInInspector]
+    public int deaths;
+
     float moveSpeed;
     float throwTimer;
 
@@ -33,9 +36,16 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        deaths = 0;
         cc = GetComponent<CharacterController>();
         material = GetComponent<MeshRenderer>().material;
         color = material.color;
+
+        ResetForNewRound();
+    }
+
+    public void ResetForNewRound()
+    {
         bomberang = null;
         bodyRotation = new Vector3 { x = 1 };
         turretRotation = new Vector3 { x = 1 };
