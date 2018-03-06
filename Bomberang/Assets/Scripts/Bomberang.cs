@@ -5,8 +5,10 @@ using XboxCtrlrInput;
 
 public class Bomberang : MonoBehaviour
 {
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject currentPlayer;
+    [HideInInspector]
+    public bool exploded;
 
     [SerializeField] float startTime = 10.0f;
     [SerializeField] float intialOffset = 0.0f;
@@ -17,8 +19,8 @@ public class Bomberang : MonoBehaviour
     Rigidbody rb;
     Collider collider;
 
-    public bool isHeld;
-    public bool onReturnFlight;
+    bool isHeld;
+    bool onReturnFlight;
 
     float timer = 10;
 
@@ -29,6 +31,7 @@ public class Bomberang : MonoBehaviour
         //currentPlayer = null;
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
+        exploded = false;
         isHeld = false;
         onReturnFlight = false;
         flightTime = 0;
@@ -94,6 +97,7 @@ public class Bomberang : MonoBehaviour
     void HitPlayer(GameObject player)
     {
         currentPlayer = player;
+
         // Make that player the player holding this bomberang
         PlayerController hitPlayer = player.GetComponent<PlayerController>();
         hitPlayer.Hit(gameObject);

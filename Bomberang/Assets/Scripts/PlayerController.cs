@@ -7,12 +7,14 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] public XboxController controllerNumber = 0;
     [SerializeField] XboxButton shootButton = XboxButton.RightBumper;
-    [SerializeField] float moveSpeed = 0;
+    [SerializeField] float moveSpeedNormal = 3;
+    [SerializeField] float moveSpeedWithBomb = 2;
     [SerializeField] float shootForce = 2;
     [SerializeField] float holdDistance = 0.8f;
     [SerializeField] float throwWaitTime = 0.5f;
     [SerializeField] GameObject turret;
 
+    float moveSpeed;
     float throwTimer;
 
     GameObject bomberang;
@@ -22,13 +24,17 @@ public class PlayerController : MonoBehaviour
     Vector3 bodyRotation;
     Vector3 turretRotation;
 
+    bool isAlive;
+
     void Awake()
     {
         cc = GetComponent<CharacterController>();
         bomberang = null;
         bodyRotation = new Vector3 { x = 1 };
         turretRotation = new Vector3 { x = 1 };
+        moveSpeed = moveSpeedNormal;
         throwTimer = 0;
+        isAlive = true;
     }
 
     void Update ()
@@ -37,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
         if (bomberang != null)
         {
+            moveSpeed = moveSpeedWithBomb;
+
             bomberang.transform.position = transform.position + turretRotation * holdDistance;
 
 
@@ -51,6 +59,15 @@ public class PlayerController : MonoBehaviour
                 throwTimer -= Time.deltaTime;
             }
         }
+        else
+        {
+            moveSpeed = moveSpeedNormal;
+        }
+    }
+
+    public void BlownUp()
+    {
+        isAlive = false;
     }
 
     public void Hit(GameObject a_bomberang)
