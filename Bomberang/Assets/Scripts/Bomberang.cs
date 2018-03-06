@@ -26,7 +26,7 @@ public class Bomberang : MonoBehaviour
     public bool isHeld;
     bool onReturnFlight;
 
-    //[HideInInspector]
+    [HideInInspector]
     public float timer = 10;
 
     float flightTime;
@@ -37,6 +37,7 @@ public class Bomberang : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
         ResetForNewRound();
+        sfx = FindObjectOfType<SFX>();
     }
 
     public void ResetForNewRound()
@@ -64,7 +65,7 @@ public class Bomberang : MonoBehaviour
             {
                 // BOOM!!!
                 isExploded = true;
-                FindObjectOfType<SFX>().PlayExplodeAudio();
+                sfx.PlayExplodeAudio();
             }
         }
         else

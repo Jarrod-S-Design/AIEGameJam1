@@ -35,7 +35,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1954328422010408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7612008, y: 1.4131565, z: -0.6607901}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -49,7 +49,8 @@ AudioSource:
   m_GameObject: {fileID: 1954328422010408}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 2d9f4c948a61f194da891d79863d109f,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -136,5 +137,9 @@ MonoBehaviour:
   audioArr:
   - {fileID: 8300000, guid: c6e43a1264c755849b78c02adea0c274, type: 3}
   - {fileID: 8300000, guid: a26d4f09af20f2946a17734c999dc894, type: 3}
-  bomberang: {fileID: 1559219979663720, guid: 8574297cb275cf04ea6959b7f5a8d9cd, type: 2}
+  - {fileID: 8300000, guid: d2108a96d61fbe0499f0bd2c6305c7bc, type: 3}
+  throwClip: {fileID: 8300000, guid: d2108a96d61fbe0499f0bd2c6305c7bc, type: 3}
+  bomberang: {fileID: 0}
+  audmixMixer: {fileID: 24300002, guid: 2d9f4c948a61f194da891d79863d109f, type: 2}
+  goSound: {fileID: 0}
   pitchMultiplier: 4

@@ -8,20 +8,9 @@ public class SFX : MonoBehaviour
 
     public AudioClip throwClip;
     public AudioClip explosionClip;
-    public GameObject bomberang;
+    //public GameObject bomberang;
     public AudioMixerGroup audmixMixer;
     public GameObject goSound;
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void PlayThrowAudio()
     {
@@ -54,7 +43,7 @@ public class SFX : MonoBehaviour
         // Play the current clip.
         sfxSource.Play();
         // This varies the pitch randomly to emulate different clips.
-        sfxSource.pitch = Random.Range(0.9f, 1.1f);
+        sfxSource.pitch = sfxSource.pitch + Random.Range(-0.1f, 0.1f);
 
         Destroy(sound, 3.0f);
     }

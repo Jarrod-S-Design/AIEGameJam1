@@ -9,32 +9,44 @@ public class AudioManager : MonoBehaviour
     public AudioSource tickAudio;
     public AudioClip[] audioArr;
     public AudioClip throwClip;
-    public GameObject bomberang;
+    //public GameObject bomberang;
     public AudioMixerGroup audmixMixer;
     public GameObject goSound;
     public float pitchMultiplier;
 
+    float startTickPitch;
 
-    // Use this for initialization
+    GameManager gm;
+
     void Start()
     {
-        pitchMultiplier = pitchMultiplier * 0.001f;
+        //pitchMultiplier = pitchMultiplier * 0.001f;
         tickAudio.clip = audioArr[0];
         tickAudio.Play();
+
+        gm = GameManager.Instance;
+
+        startTickPitch = tickAudio.pitch;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Debug.Log(tickAudio.pitch);
-        if (bomberang.GetComponent<Bomberang>().timer <= 5 && bomberang.GetComponent<Bomberang>().timer > 0)
+        //Debug.Log(tickAudio.pitch);
+        if (gm.bomberang.timer <= 5.0f && gm.bomberang.timer > 0.0f)
         {
-            tickAudio.pitch += pitchMultiplier;
+            tickAudio.pitch += pitchMultiplier * Time.deltaTime;
         }
 
-        if (bomberang.GetComponent<Bomberang>().timer <= 0f && bomberang.GetComponent<Bomberang>().isHeld)
+        if (!(gm.bomberang.isExploded && gm.bomberang.isHeld))
         {
-            tickAudio.pitch = 1;
+            if (!tickAudio.isPlaying)
+            {
+                tickAudio.Play();
+            }
+        }
+        else
+        {
+            tickAudio.pitch = startTickPitch;
             //tickAudio.clip = null;
             tickAudio.clip = audioArr[1];
             if (!tickAudio.isPlaying && tickAudio.clip == audioArr[0])
@@ -45,7 +57,6 @@ public class AudioManager : MonoBehaviour
             if (!tickAudio.isPlaying && tickAudio.clip == audioArr[1])
             {
                 tickAudio.clip = null;
-                
             }
             //play BOOM
         }

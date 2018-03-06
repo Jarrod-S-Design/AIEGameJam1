@@ -24,16 +24,23 @@ public class Lava : MonoBehaviour
 
     float timer;
 
+    void Awake()
+    {
+        collider = GetComponent<Collider>();
+    }
+
     void Start()
     {
         lavaState = LavaState.Stagnate;
+        collider.isTrigger = true;
+        collider.enabled = false;
         timer = stagnateTime;
 
         warmUpParticle.time = warmUpTime;
         activeParticle.time = activeTime;
     }
 	
-	void Update ()
+	void Update()
     {
         switch (lavaState)
         {
@@ -41,7 +48,11 @@ public class Lava : MonoBehaviour
                 if (timer < 0)
                 {
                     lavaState = LavaState.WarmUp;
+                    timer = warmUpTime;
                     // Start Warmup particles
+                    var main = warmUpParticle.main;
+                    main.duration = warmUpTime;
+                    warmUpParticle.Play();
                 }
                 else
                 {
@@ -52,11 +63,14 @@ public class Lava : MonoBehaviour
                 if (timer < 0)
                 {
                     lavaState = LavaState.Active;
-                    // Stop Warmup particles
+                    timer = activeTime;
                     // Start Active particles
+                    var main = activeParticle.main;
+                    main.duration = activeTime;
+                    activeParticle.Play();
 
                     // Activate the collider
-
+                    collider.enabled = true;
                 }
                 else
                 {
@@ -67,10 +81,10 @@ public class Lava : MonoBehaviour
                 if (timer < 0)
                 {
                     lavaState = LavaState.Stagnate;
-                    // Stop Active particles
+                    timer = stagnateTime;
 
                     // Deactivate the collider
-
+                    collider.enabled = false;
                 }
                 else
                 {

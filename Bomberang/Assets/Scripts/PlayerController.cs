@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
 
     bool isAlive;
 
+    GameManager gm;
+
     //Material material;
 
     void Awake()
@@ -45,6 +47,11 @@ public class PlayerController : MonoBehaviour
         //color = material.color;
 
         ResetForNewRound();
+    }
+
+    private void Start()
+    {
+        gm = GameManager.Instance;
     }
 
     public void ResetForNewRound()
@@ -122,6 +129,14 @@ public class PlayerController : MonoBehaviour
             turretRotation = Vector3.Lerp(turretRotation, targetRotation, 10 * Time.deltaTime);
         }
         turret.transform.LookAt(transform.position + turretRotation);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Lava"))
+        {
+            gm.PlayerDied(this);
+        }
     }
 
 }

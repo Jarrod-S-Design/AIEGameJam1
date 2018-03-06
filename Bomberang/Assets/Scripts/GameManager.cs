@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    static GameManager instance;
+    public static GameManager Instance { get { return instance; } }
+
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject playerLegs;
     [SerializeField] GameObject player1BodyPrefab;
@@ -24,7 +27,11 @@ public class GameManager : MonoBehaviour
 
     GameObject[] players;
     GameObject bombGO;
-    Bomberang bomberang;
+
+    List<PlayerController> deadPlayers = new List<PlayerController>();
+
+    [HideInInspector]
+    public Bomberang bomberang;
 
     int playerCount;
 
@@ -47,6 +54,12 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        // Make sure there is only on gameManager
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
+
         players = new GameObject[4] { null, null, null, null };
         playerCount = 0;
         roundTimer = 0;
@@ -186,6 +199,17 @@ public class GameManager : MonoBehaviour
 
     void UpdateRound()
     {
+        // Check for dead Players
+        if (deadPlayers.Count > 0)
+        {
+            foreach (var player in deadPlayers)
+                player.deaths++;
+
+            deadPlayers.Clear();
+
+            StartNewRound();
+        }
+
         if (bomberang.isExploded)
         {
             bomberang.currentPlayer.GetComponent<PlayerController>().deaths++;
@@ -285,4 +309,10 @@ public class GameManager : MonoBehaviour
         players[playerNum].transform.position = playerSpawns.transform.GetChild(playerNum).position;
         players[playerNum].GetComponent<PlayerController>().ResetForNewRound();
     }
+
+    public void PlayerDied(PlayerController player)
+    {
+        deadPlayers.Add(player);
+    }
+
 }
