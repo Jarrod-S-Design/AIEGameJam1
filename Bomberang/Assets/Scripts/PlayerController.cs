@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject turret;
 
     [HideInInspector]
+    public Animator animator;
+
+    //[HideInInspector]
     public Color color;
 
     [HideInInspector]
@@ -32,14 +35,14 @@ public class PlayerController : MonoBehaviour
 
     bool isAlive;
 
-    Material material;
+    //Material material;
 
     void Awake()
     {
         deaths = 0;
         cc = GetComponent<CharacterController>();
-        material = GetComponent<MeshRenderer>().material;
-        color = material.color;
+        //material = GetComponent<MeshRenderer>().material;
+        //color = material.color;
 
         ResetForNewRound();
     }
@@ -70,6 +73,7 @@ public class PlayerController : MonoBehaviour
                 // Shoot the boomberang!
                 bomberang.GetComponent<Bomberang>().Shoot(turretRotation.normalized * shootForce);
                 bomberang = null;
+                animator.SetTrigger("Throw");
             }
             else
             {

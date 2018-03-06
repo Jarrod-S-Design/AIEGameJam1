@@ -7,42 +7,106 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject playerLegs;
+    [SerializeField] GameObject player1BodyPrefab;
+    [SerializeField] GameObject player2BodyPrefab;
     [SerializeField] GameObject playerSpawns;
     [SerializeField] GameObject bomberangPrefab;
 
     [SerializeField] Text timer;
     [SerializeField] Text p1Deaths;
     [SerializeField] Text p2Deaths;
+    [Header("Variables")]
+    [SerializeField] int maxRounds;
+    [SerializeField] float newRoundStartTime;
 
+    int roundCount;
 
     GameObject[] players;
     GameObject bombGO;
     Bomberang bomberang;
 
-    int playerCount = 0;
+    int playerCount;
+
+    float roundTimer;
+
+    bool gameWon;
+
+    int winningPlayerNumber;
+
+    enum GameState
+    {
+        Menu = 0,
+        RoundStart,
+        Round,
+        RoundEnd,
+        GameEnd
+    }
+
+    GameState gameState;
 
     void Awake()
     {
         players = new GameObject[4] { null, null, null, null };
+        playerCount = 0;
+        roundTimer = 0;
+
+        gameState = 0;
+        gameWon = false;
+
+        winningPlayerNumber = -1;
     }
 
-    private void Start()
+    void Start()
     {
+        StartGame();
+    }
+
+    public void StartGame()
+    {
+        players = new GameObject[4] { null, null, null, null };
+        playerCount = 0;
+        roundCount = 0;
+
+        gameWon = false;
+        winningPlayerNumber = -1;
+
         AddPlayer(XboxController.First);
         AddPlayer(XboxController.Second);
 
         CreateBomb(Random.Range(0, playerCount));
 
-        StartNewRound();
+        roundTimer = newRoundStartTime;
+        gameState = GameState.RoundStart;
+    }
+
+    void EndGame()
+    {
+        // Destroy all of the player objects
+        for (int i = 0; i < 4; i++)
+        {
+            if (players[i] != null)
+            {
+                Destroy(players[i]);
+            }
+        }
+        players = new GameObject[4] { null, null, null, null };
+        playerCount = 0;
     }
 
     void StartNewRound()
     {
+        gameState = GameState.Round;
+
+        roundCount++;
+
+        // Setup the bomberang
         bomberang.ResetForNewRound();
         bomberang.HitPlayer(players[Random.Range(0, playerCount)]); // Follow a random player
         bomberang.isHeld = false;
         bomberang.transform.position = Vector3.zero;
 
+        // Respawn all of the players
         for (int i = 0; i < 4; i++)
         {
             if (players[i] != null)
@@ -55,26 +119,26 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        if (bomberang.isExploded)
+        switch (gameState)
         {
-            bomberang.currentPlayer.GetComponent<PlayerController>().deaths++;
+            case GameState.Menu:
 
-            StartNewRound();
+                break;
+            case GameState.RoundStart:
+                UpdateRoundStart();
+                break;
+            case GameState.Round:
+                UpdateRound();
+                break;
+            case GameState.RoundEnd:
+                UpdateRoundEnd();
+                break;
+            case GameState.GameEnd:
+                UpdateGameEnd();
+                break;
+            default:
+                break;
         }
-
-        // Update the canvas
-        if (bomberang.timer > 5)
-        {
-            timer.text = ((int)bomberang.timer).ToString();
-        }
-        else
-        {
-            timer.text = bomberang.timer.ToString("F2");
-
-        }
-        p1Deaths.text = players[0].GetComponent<PlayerController>().deaths.ToString();
-        p2Deaths.text = players[1].GetComponent<PlayerController>().deaths.ToString();
-
 
         // Character selection
 
@@ -108,6 +172,70 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void UpdateRoundStart()
+    {
+        if (roundTimer > 0)
+        {
+            roundTimer -= Time.deltaTime;
+        }
+        else
+        {
+            StartNewRound();
+        }
+    }
+
+    void UpdateRound()
+    {
+        if (bomberang.isExploded)
+        {
+            bomberang.currentPlayer.GetComponent<PlayerController>().deaths++;
+
+            StartNewRound();
+        }
+
+        // Update the canvas
+        if (bomberang.timer > 5)
+        {
+            timer.text = ((int)bomberang.timer).ToString();
+        }
+        else
+        {
+            timer.text = bomberang.timer.ToString("F2");
+
+        }
+        p1Deaths.text = players[0].GetComponent<PlayerController>().deaths.ToString();
+        p2Deaths.text = players[1].GetComponent<PlayerController>().deaths.ToString();
+    }
+
+    void UpdateRoundEnd()
+    {
+        // Check if a player has won
+        for (int i = 0; i < 4; i++)
+        {
+            // If the player has won more than half the max rounds
+            if (players[i].GetComponent<PlayerController>().deaths >= Mathf.Ceil(maxRounds / 2.0f))
+            {
+
+            }
+        }
+
+
+        // Wait before starting a new round
+        if (roundTimer > 0)
+        {
+            roundTimer -= Time.deltaTime;
+        }
+        else
+        {
+            StartNewRound();
+        }
+    }
+
+    void UpdateGameEnd()
+    {
+
+    }
+
     void CreateBomb(int playerNum)
     {
         // Create the bomb
@@ -117,11 +245,34 @@ public class GameManager : MonoBehaviour
 
     void AddPlayer(XboxController number)
     {
-        playerCount++; 
+        playerCount++;
 
         GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         players[(int)number - 1] = newPlayer;
-        newPlayer.GetComponent<PlayerController>().controllerNumber = number;
+        PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
+        newPlayerController.controllerNumber = number;
+        Instantiate(playerLegs, newPlayer.transform); // Create the legs
+        GameObject newPlayerBody = null;
+        switch (number)
+        {
+            case XboxController.All:
+                break;
+            case XboxController.First:
+                newPlayerBody = Instantiate(player1BodyPrefab, newPlayer.transform.GetChild(0)); // Create the body
+                break;
+            case XboxController.Second:
+                newPlayerBody = Instantiate(player2BodyPrefab, newPlayer.transform.GetChild(0)); // Create the body
+                break;
+            case XboxController.Third:
+                break;
+            case XboxController.Fourth:
+                break;
+            default:
+                break;
+        }
+
+        newPlayerController.animator = newPlayerBody.GetComponent<Animator>();
+
 
         //newPlayer.transform.position = playerSpawns.transform.GetChild((int)number - 1).position;
     }
