@@ -18,6 +18,7 @@ public class Bomberang : MonoBehaviour
     [SerializeField] float normalDrag = 0.5f;
     [SerializeField] float returnDrag = 10f;
 
+    SFX sfx;
     Rigidbody rb;
     Collider collider;
 
@@ -63,6 +64,7 @@ public class Bomberang : MonoBehaviour
             {
                 // BOOM!!!
                 isExploded = true;
+                FindObjectOfType<SFX>().PlayExplodeAudio();
             }
         }
         else
@@ -96,6 +98,8 @@ public class Bomberang : MonoBehaviour
         collider.isTrigger = false;
         flightTime = 0;
         rb.velocity = Vector3.zero;
+        FindObjectOfType<SFX>().PlayThrowAudio();
+        
     }
 
     void StartReturn()
@@ -117,6 +121,11 @@ public class Bomberang : MonoBehaviour
         onReturnFlight = false;
         collider.isTrigger = true;
         rb.velocity = Vector3.zero;
+    }
+
+    public void playThrowSound()
+    {
+        gameObject.GetComponent<AudioSource>().PlayOneShot(gameObject.GetComponent<AudioSource>().clip);
     }
 
     private void OnCollisionEnter(Collision collision)

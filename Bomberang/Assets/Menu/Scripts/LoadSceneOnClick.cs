@@ -7,9 +7,8 @@ public class LoadSceneOnClick : MonoBehaviour
 {
 	//Clicking a button on the menu passes the scene index through this int
 	//This then finds the scene to load using the scene index from the buld settings
-	public void LoadByIndex(int sceneIndex)
+	public void LoadByIndex()
 	{
-		SceneManager.LoadSceneAsync ("Main");
-        //SceneManager.LoadSceneAsync("HelpOverlay");
+		SceneManager.LoadScene ("Main");
 	}
 }
