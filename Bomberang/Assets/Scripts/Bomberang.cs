@@ -5,9 +5,9 @@ using XboxCtrlrInput;
 
 public class Bomberang : MonoBehaviour
 {
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject currentPlayer;
-    [HideInInspector]
+    //[HideInInspector]
     public bool isExploded;
 
     public TrailColour trailColour;
@@ -21,11 +21,11 @@ public class Bomberang : MonoBehaviour
     Rigidbody rb;
     Collider collider;
 
-    [HideInInspector]
+    //[HideInInspector]
     public bool isHeld;
     bool onReturnFlight;
 
-    [HideInInspector]
+    //[HideInInspector]
     public float timer = 10;
 
     float flightTime;
@@ -35,9 +35,14 @@ public class Bomberang : MonoBehaviour
         //currentPlayer = null;
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
+        ResetForNewRound();
+    }
+
+    public void ResetForNewRound()
+    {
         isExploded = false;
         isHeld = false;
-        onReturnFlight = false;
+        onReturnFlight = true;
         flightTime = 0;
         timer = startTime;
     }

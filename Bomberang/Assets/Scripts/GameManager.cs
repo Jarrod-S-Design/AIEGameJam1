@@ -28,12 +28,30 @@ public class GameManager : MonoBehaviour
         CreateBomb(Random.Range(0, playerCount));
     }
 
+    void StartNewRound()
+    {
+        bomberang.ResetForNewRound();
+        bomberang.HitPlayer(players[Random.Range(0, playerCount)]); // Follow a random player
+        bomberang.isHeld = false;
+        bomberang.transform.position = Vector3.zero;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (players[i] != null)
+            {
+                RespawnPlayer(i);
+            }
+        }
+    }
+
     void Update()
     {
 
         if (bomberang.isExploded)
         {
+            bomberang.currentPlayer.GetComponent<PlayerController>().deaths++;
 
+            StartNewRound();
         }
 
         // Character selection
@@ -89,6 +107,10 @@ public class GameManager : MonoBehaviour
 
     void RespawnPlayer(int playerNum)
     {
+        if (players[playerNum] == null)
+            return;
+
         players[playerNum].transform.position = playerSpawns.transform.GetChild(playerNum).position;
+        players[playerNum].GetComponent<PlayerController>().ResetForNewRound();
     }
 }
